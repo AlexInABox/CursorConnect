@@ -1,0 +1,127 @@
+.fa-icon {
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    justify-content: center;
+    margin: 0;
+    padding: 0 0.1em;
+    position: relative;
+    user-select: none;
+    vertical-align: text-bottom;
+}
+
+#switchContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#switchDefaultState {
+    fill: rgb(86, 143, 244);
+    flex-grow: 1;
+    font-size: 96px;
+    justify-content: center;
+    padding: 0;
+    stroke: none;
+    stroke-width: 64;
+    width: fit-content;
+}
+
+#switchWhitelisted {
+    fill: rgb(86, 143, 244);
+    flex-grow: 1;
+    font-size: 96px;
+    justify-content: center;
+    padding: 0;
+    stroke: none;
+    stroke-width: 64;
+    width: fit-content;
+}
+
+#switchBlacklisted {
+    fill: rgb(45, 65, 99);
+    flex-grow: 1;
+    font-size: 96px;
+    justify-content: center;
+    padding: 0;
+    stroke: none;
+    stroke-width: 64;
+    width: fit-content;
+}
+
+#switchButton {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+}
+
+#switchButton span {
+    /* Center the content vertically */
+    display: flex;
+    align-items: center;
+}
+
+#switchButtonSVG {
+    width: 80px;
+    height: 80px;
+}
+
+#refreshButton {
+    /* Center the div horizontally and vertically */
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    width: 50px;
+    height: 100px;
+    cursor: pointer;
+    background-color: rgba(179, 198, 250, 0.2);
+    border-radius: 10px;
+
+    margin-left: 5px;
+    display: none;
+
+    fill: rgb(86, 143, 244);
+
+}
+
+#refreshButtonSVG {
+    /* Center the SVG icon inside the refresh button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 20px;
+    height: 20px;
+}
+
+#infoSection {
+    background-color: #2E2F32;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#cursorUserCounterHeader {
+    font-size: 20px;
+    font-family: arial, sans-serif;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+body {
+    width: 250px;
+    background-color: #232729
+}
+
+#headerText {
+    font-size: 20px;
+    margin: 0px;
+    padding: 10px;
+    font-family: arial, sans-serif;
+}
