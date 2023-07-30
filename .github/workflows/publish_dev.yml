@@ -1,4 +1,4 @@
-name: ZipMe
+name: Publish to Chrome Web Store - dev (review)
 on:
     push:
       branches: [ "dev" ]
@@ -14,7 +14,7 @@ jobs:
             - uses: mnao305/chrome-extension-upload@v4.0.1
               with:
                 file-path: CursorConnect.zip
-                extension-id: hogefuga(golmpimdjemjkffedbgjflgbcmcdcfnf)
+                extension-id: pbgcbdejeombmjjgcoiifcecobdhfmnl
                 client-id: ${{ secrets.CLIENT_ID }}
                 client-secret: ${{ secrets.CLIENT_SECRET }}
                 refresh-token: ${{ secrets.REFRESH_TOKEN }}
