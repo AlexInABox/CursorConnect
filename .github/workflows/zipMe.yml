@@ -10,8 +10,12 @@ jobs:
             - uses: actions/checkout@v1
             - uses: montudor/action-zip@v1
               with:
-                args: zip -qq -r CursorConnect.zip assets
-            - uses: actions/upload-artifact@v2
-              with:
-                name: CursorConnect.zip
-                path: CursorConnect.zip
+                args: zip -qq -r CursorConnect.zip assets background.js contentScript.js flip.css flip.js manifest.json popup.css popup.html popup.js tick.css
+            uses: mnao305/chrome-extension-upload@v4.0.1
+            with:
+                file-path: CursorConnect.zip
+                extension-id: hogefuga(pbgcbdejeombmjjgcoiifcecobdhfmnl)
+                client-id: ${{ secrets.CLIENT_ID }}
+                client-secret: ${{ secrets.CLIENT_SECRET }}
+                refresh-token: ${{ secrets.REFRESH_TOKEN }}
+                publish: false
