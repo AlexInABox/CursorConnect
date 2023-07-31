@@ -31,6 +31,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                         chrome.tabs.sendMessage(tabId, {
                             type: "new-url",
                             url: tab.url
+                        }, function (response) {
+                            if (chrome.runtime.lastError) {
+                                // Catch the error here
+                            } else {
+                                // Handle the response from the content script (if any)
+                                console.log("Message sent successfully!");
+                            }
                         });
                     }
                 } else {
@@ -40,6 +47,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                     chrome.tabs.sendMessage(tabId, {
                         type: "new-url",
                         url: tab.url
+                    }, function (response) {
+                        if (chrome.runtime.lastError) {
+                            // Catch the error here
+                        } else {
+                            // Handle the response from the content script (if any)
+                            console.log("Message sent successfully!");
+                        }
                     });
                 }
             });
