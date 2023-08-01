@@ -2,10 +2,9 @@ var counter = 0;
 
 
 function handleTickInit(tick) {
-    tick.value = 0;
 
     //wait 1 sec before updating
-    setTimeout(function () { }, 1000);
+    //setTimeout(function () { }, 1000);
 }
 
 function updateCursorCounter(value) {
@@ -29,6 +28,10 @@ function sendMessageToContentScript() {
                 } else if (response) {
                     // Process the response if available
                     updateCursorCounter(response);
+                } else {
+                    // Handle the case where the content script was not injected
+                    console.log("Error: Content script not injected.");
+                    updateCursorCounter(0);
                 }
             });
         } else {
@@ -146,3 +149,13 @@ refreshButton.addEventListener("click", function () {
     });
     window.close();
 });
+
+
+var customizationButtons = document.getElementsByClassName("customizationElement");
+for (let i = 0; i < customizationButtons.length; i++) {
+    customizationButtons[i].addEventListener("click", applyCustomization.bind(null, customizationButtons[i].id));
+}
+
+function applyCustomization(id) {
+    console.log("applyCustomization: " + id);
+}

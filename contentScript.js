@@ -17,6 +17,7 @@
             connectToWebSocket();
             response(200);
         } else if (obj.type == "fetch-user-count") {
+            console.log("cursors: fetch-user-count: " + cursorUserCounter);
             response(cursorUserCounter);
         }
     });
