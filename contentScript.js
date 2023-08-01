@@ -23,8 +23,8 @@
 
     window.addEventListener('mousemove', (event) => {
         //get the cursor position
-        mousePosition.x = event.clientX;
-        mousePosition.y = event.clientY;
+        mousePosition.x = event.pageX;
+        mousePosition.y = event.pageY;
     });
 
     const terminatePreviousWebSocket = () => {
