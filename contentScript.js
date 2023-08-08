@@ -45,7 +45,7 @@
     let ws; //websocket connection
 
     const connectToWebSocket = () => {
-        ws = new WebSocket("wss://node.alexinabox.de:2053");
+        ws = new WebSocket("wss://alexinabox.de/wss/");
 
         //when the websocket connection is established
         ws.onopen = function () {
