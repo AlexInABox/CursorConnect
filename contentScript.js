@@ -1,5 +1,6 @@
 (() => {
     let URL;
+    let skinId;
 
     let mousePosition = {
         x: -2000,
@@ -11,6 +12,7 @@
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
         if (obj.type == "new-url") {
             URL = obj.url;
+            skinId = obj.skinId;
             logThisMessage();
             terminatePreviousWebSocket();
             injectCSS();
@@ -40,6 +42,7 @@
 
     const logThisMessage = () => {
         console.log("contentScript.js: " + URL);
+        console.log("contentScript.js: " + skinId);
     };
 
     let ws; //websocket connection
@@ -50,7 +53,7 @@
         //when the websocket connection is established
         ws.onopen = function () {
             //send a message to the server
-            ws.send(JSON.stringify({ type: "login", room: URL }));
+            ws.send(JSON.stringify({ type: "login", room: URL, skinId: skinId || 0 }));
         }
 
         //when the websocket receives a message
@@ -65,7 +68,8 @@
             //if the message is a new client
             if (data.type == "connected") {
                 //add the client to the list
-                addClient(data.id);
+
+                addClient(data.id, data.skinId || 0);
             }
             //if the message is a client disconnect
             if (data.type == "disconnected") {
@@ -95,6 +99,7 @@
         ws.onclose = function (event) {
 
             cursorUserCounter = 0;
+            clearInterval(keepaliveInterval);
 
             console.log("cursors: websocket closed for reason: " + event.code);
         }
@@ -102,21 +107,34 @@
         ws.onerror = function (error) {
 
             cursorUserCounter = 0;
+            clearInterval(keepaliveInterval);
 
             console.log("cursors: We ran into an WebSocket related error. No need to alarm google tho...");
         }
+
+        //send keepalive message every 15 seconds
+        const keepaliveInterval = setInterval(function () {
+            ws.send(JSON.stringify({ type: "keepalive" }));
+        }, 15000);
     }
 
-    const addClient = (id) => {
-        console.log("contentScript.js: addClient: id: " + id);
+    const addClient = (id, skinId) => {
+        console.log("contentScript.js: addClient: adding client with id: " + id + " and skinId: " + skinId);
 
         cursorUserCounter++;
 
-        //create a new cursor by taking the cursor.png image
+        //create a new cursor element
         var cursor = document.createElement("img");
         cursor.id = id;
         cursor.className = "cursor";
-        cursor.src = chrome.runtime.getURL("assets/cursor.png");
+
+        try {
+            cursor.src = chrome.runtime.getURL("customization/cursors/" + skinId + ".png");
+        }
+        catch (e) {
+            cursor.src = chrome.runtime.getURL("customization/cursors/0.png");
+        }
+
 
         //add the cursor to the page
         document.body.appendChild(cursor);
@@ -153,13 +171,14 @@
             top: -2000px;
             pointer-events: none;
             width: 40px;
+            z-index: 1000;
         }
         `;
             //add the style element to the page
 
             document.head.appendChild(style);
 
-            console.log("cursors: injected css into: " + URL);
+            console.log("cursorConnect: injected css into: " + URL);
         }
     }
 })();

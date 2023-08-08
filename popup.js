@@ -48,6 +48,7 @@ setInterval(sendMessageToContentScript, 1000);
 
 getBlacklistedStatus();
 function getBlacklistedStatus() {
+    console.log("getBlacklistedStatus");
     // First, get the active tab to ensure the content script is injected
     // Second, look if the url is already in the blacklist by checking the local storage
     // Third, if it is in the blacklist set the button to blacklisted
@@ -59,13 +60,24 @@ function getBlacklistedStatus() {
             chrome.storage.local.get("cursors.blacklist", function (result) {
                 if (result["cursors.blacklist"]) {
                     var blacklist = result["cursors.blacklist"];
-                    if (blacklist.includes(url) || !(url.startsWith("http://") || url.startsWith("https://"))) {
+                    if (blacklist.includes(url)) {
+                        console.log("blacklist contains url, setting to blacklisted");
                         document.getElementById("switchDefaultState").id = "switchBlacklisted";
-                    } else {
+                    } else if (url.startsWith("http://") || url.startsWith("https://")) {
+                        console.log("blacklist does not contain url, but url is valid, setting to whitelisted");
                         document.getElementById("switchDefaultState").id = "switchWhitelisted";
+                    } else {
+                        console.log("blacklist does not contain url, and url is not valid, setting to disabled");
+                        document.getElementById("switchDefaultState").id = "switchBlacklisted";
                     }
                 } else {
-                    document.getElementById("switchDefaultState").id = "switchBlacklisted";
+                    if (url.startsWith("http://") || url.startsWith("https://")) {
+                        console.log("blacklist does not exist, but url is valid, setting to whitelisted");
+                        document.getElementById("switchDefaultState").id = "switchWhitelisted";
+                    } else {
+                        console.log("blacklist does not exist, and url is not valid, setting to disabled");
+                        document.getElementById("switchDefaultState").id = "switchBlacklisted";
+                    }
                 }
             });
         } else {
@@ -112,6 +124,7 @@ function blackwhitelistWebsite() {
                     }
                 } else if (url.startsWith("http://") || url.startsWith("https://")) {
                     // Add the url to the blacklist
+                    console.log("blacklist does not exist, creating it");
                     var blacklist = [];
                     blacklist.push(url);
                     chrome.storage.local.set({ "cursors.blacklist": blacklist }, function () {
@@ -153,9 +166,55 @@ refreshButton.addEventListener("click", function () {
 
 var customizationButtons = document.getElementsByClassName("customizationElement");
 for (let i = 0; i < customizationButtons.length; i++) {
-    customizationButtons[i].addEventListener("click", applyCustomization.bind(null, customizationButtons[i].id));
+    image = customizationButtons[i].children[0];
+    imageSource = image.src; //chrome-extension://mnaknebffpoaobpghjjpmlpdpjmnbfnc/customization/cursors/0.png
+    imageSource = imageSource.substring(imageSource.lastIndexOf("/") + 1, imageSource.lastIndexOf("."));
+    customizationButtons[i].addEventListener("click", applyCustomization.bind(null, imageSource));
 }
 
 function applyCustomization(id) {
     console.log("applyCustomization: " + id);
+
+    //Write the skinId to the local storage
+    chrome.storage.local.set({ "cursors.customization.skinId": id }, function () {
+        if (chrome.runtime.lastError) {
+            // Catch the error here
+            console.log("Error: " + chrome.runtime.lastError);
+        }
+        document.getElementById("refreshButton").style.display = "flex";
+        document.getElementsByClassName("switchContainer")[0].style.justifyContent = "right";
+        console.log("Set skinId to " + id);
+    });
 }
+
+function getActiveSkin() {
+    chrome.storage.local.get("cursors.customization.skinId", function (result) {
+        if (result["cursors.customization.skinId"]) {
+            var skinId = result["cursors.customization.skinId"];
+            if (skinId) {
+                console.log("getActiveSkin: skinId: " + skinId);
+                var customizationButtons = document.getElementsByClassName("customizationElement");
+                for (let i = 0; i < customizationButtons.length; i++) {
+                    image = customizationButtons[i].children[0];
+                    imageSource = image.src; //chrome-extension://mnaknebffpoaobpghjjpmlpdpjmnbfnc/customization/cursors/0.png
+                    imageSource = imageSource.substring(imageSource.lastIndexOf("/") + 1, imageSource.lastIndexOf("."));
+                    if (imageSource == skinId) {
+                        customizationButtons[i].classList.add("active");
+                    }
+                }
+            }
+        } else {
+            console.log("getActiveSkin: skinId does not exist therefore the default skin is active");
+            var customizationButtons = document.getElementsByClassName("customizationElement");
+            for (let i = 0; i < customizationButtons.length; i++) {
+                image = customizationButtons[i].children[0];
+                imageSource = image.src; //chrome-extension://mnaknebffpoaobpghjjpmlpdpjmnbfnc/customization/cursors/0.png
+                imageSource = imageSource.substring(imageSource.lastIndexOf("/") + 1, imageSource.lastIndexOf("."));
+                if (imageSource == 0) {
+                    customizationButtons[i].classList.add("active");
+                }
+            }
+        }
+    });
+}
+getActiveSkin();
