@@ -38,7 +38,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     }
 });
 
-
 function initializeContentScript(tabId, tab) {
     chrome.storage.local.get("cursors.customization.skinId", function (result) {
         if (result["cursors.customization.skinId"]) {
