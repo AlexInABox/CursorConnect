@@ -166,7 +166,7 @@
             style.innerHTML = `
         .cursor {
             position: absolute;
-            transform: translate(-3%, -4%);
+            transform: translate(-33%, -23%);
             left: -2000px;
             top: -2000px;
             pointer-events: none;
