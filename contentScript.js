@@ -30,6 +30,17 @@
         mousePosition.y = event.pageY;
     });
 
+    var previousDistanceToBoundaryX = document.documentElement.scrollLeft;
+    var previousDistanceToBoundaryY = document.documentElement.scrollTop;
+    window.addEventListener('scroll', (event) => {
+        //During a scroll event the mouse position is not updated. We need to update it manually by adding the distance we have scrolled to the mouse position.
+        mousePosition.x += (document.documentElement.scrollLeft - previousDistanceToBoundaryX);
+        mousePosition.y += (document.documentElement.scrollTop - previousDistanceToBoundaryY);
+
+        previousDistanceToBoundaryX = document.documentElement.scrollLeft;
+        previousDistanceToBoundaryY = document.documentElement.scrollTop;
+    });
+
     const terminatePreviousWebSocket = () => {
         if (ws) {
             try {
@@ -68,7 +79,6 @@
             //if the message is a new client
             if (data.type == "connected") {
                 //add the client to the list
-
                 addClient(data.id, data.skinId || 0);
             }
             //if the message is a client disconnect
@@ -94,7 +104,7 @@
                 console.log("cursors: We ran into an WebSocket related error when sendin a message. No need to alarm google tho... Here: " + String(error));
             }
 
-        }, 20);
+        }, 20); //10ms is 100 times per second. This is a good balance between smoothness and performance. Humans eyes cant notice anything that has been less than 13ms on the screen.
 
         ws.onclose = function (event) {
 
@@ -151,9 +161,36 @@
         //get the cursor
         var cursor = document.getElementById(id);
         //update the cursor position
-        cursor.style.left = x + "px";
-        cursor.style.top = y + "px";
+        //cursor.style.transition = 'transform 0.1s ease'; // Adjust the transition duration as needed
+        //cursor.style.transform = `translate(${x}px, ${y}px)`;
+
+        animateCursor(cursor, x, y); // TODO: Add ability to disable animation or auto-disable if cpu usage is too high
     }
+
+    const animateCursor = (cursor, targetX, targetY) => {
+        const animationDuration = 60; // Adjust the duration as needed (in milliseconds)
+        const startTime = performance.now();
+        const startX = parseFloat(cursor.style.left || 0);
+        const startY = parseFloat(cursor.style.top || 0);
+
+        const animate = (currentTime) => {
+            const progress = (currentTime - startTime) / animationDuration;
+
+            if (progress < 1) {
+                const newX = startX + (targetX - startX) * progress;
+                const newY = startY + (targetY - startY) * progress;
+                cursor.style.left = newX + 'px';
+                cursor.style.top = newY + 'px';
+                requestAnimationFrame(animate);
+            } else {
+                cursor.style.left = targetX + 'px';
+                cursor.style.top = targetY + 'px';
+            }
+        };
+
+        requestAnimationFrame(animate);
+    };
+
 
     const injectCSS = () => {
         var alreadyInjected = document.getElementById("multiCursorStyle");
