@@ -13,6 +13,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v1
       - run: cp platform/firefox/manifest.json manifest.json && rm -rf promo platform
+
       - name: "web-ext build"
         id: web-ext-build
         uses: kewisch/action-web-ext@v1
@@ -28,12 +29,11 @@ jobs:
           name: target.xpi
           path: ${{ steps.web-ext-build.outputs.target }}
       
-      -name: "Publish"
-       uses: actions/checkout@v1
-       uses: trmcnvn/firefox-addon@v1
-       with:
-        uuid: 'cursor@alexinabox.de'
-        xpi: ${{ steps.web-ext-build.outputs.target }}
-        manifest: platform/firefox/manifest.json
-        api-key: ${{ secrets.FIREFOX_API_KEY }}
-        api-secret: ${{ secrets.FIREFOX_API_SECRET }}
+      - name: "Publish"
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          uuid: 'cursor@alexinabox.de'
+          xpi: ${{ steps.web-ext-build.outputs.target }}
+          manifest: platform/firefox/manifest.json
+          api-key: ${{ secrets.FIREFOX_API_KEY }}
+          api-secret: ${{ secrets.FIREFOX_API_SECRET }}
