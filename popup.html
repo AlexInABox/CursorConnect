@@ -5,8 +5,18 @@
 </head>
 
 <body>
-  <header style="background-color: #1B1B23; text-align: left; color: white; margin: -10px; margin-bottom: 10px;">
-    <p id="headerText">multiCursors</p>
+  <header
+    style="background-color: #1B1B23; text-align: left; color: white; margin: -10px; margin-bottom: 10px; display: flex; justify-content: right; height: 43px;">
+    <p id="headerText" style="position: absolute; left: 0px;">CursorConnect</p>
+    <div class="userCounterWrapper" style="padding: 10px;">
+      <div class="tick" data-did-init="handleTickInit">
+        <span data-layout="horizontal fit">
+          <span data-repeat="true" data-transform="arrive(5, .01) -> round -> split -> delay(rtl, 100, 150)">
+            <span data-view="flip"></span>
+          </span>
+        </span>
+      </div>
+    </div>
   </header>
 
   <div id="switchContainer" style="text-align: center;">
@@ -35,21 +45,29 @@
       </span>
     </div>
   </div>
-  <div id="infoSection" style="text-align: center;">
-    <!-- Flap clock counter -->
-    <p id="cursorUserCounterHeader" style="margin: 0px; padding: 10px; font-size: 15px;">Active Cursors:</p>
-    <div class="tick" data-did-init="handleTickInit">
-      <span data-layout="horizontal fit">
-        <span data-repeat="true" data-transform="arrive(5, .01) -> round -> split -> delay(rtl, 100, 150)">
-          <span data-view="flip"></span>
-        </span>
-      </span>
+  <div id="infoSection" style="text-align: center; height: 150px;">
+    <p id="inforSectionHeader" style="margin-top: 0px;">Customize your cursor:</p>
+    <div id="customizationWrapper" style="display: grid;">
+      <div id="element1" class="customizationElement">
+        <img id="element1Image" class="customizationImage" src="/customization/cursors/0.png">
+      </div>
+      <div id="element2" class="customizationElement">
+        <img id="element2Image" class="customizationImage" src="/customization/cursors/1.png">
+      </div>
+      <div id="element3" class="customizationElement">
+        <img id="element3Image" class="customizationImage" src="/customization/cursors/2.png">
+      </div>
+      <div id="element4" class="customizationElement">
+        <img id="element4Image" class="customizationImage" src="/customization/cursors/3.png">
+      </div>
+      <div id="element5" class="customizationElement">
+        <img id="element5Image" class="customizationImage" src="/customization/cursors/4.png">
+      </div>
     </div>
-  </div>
-  <script src="/popup.js"></script>
-  <script src="/flip.js"></script>
-  <link href="/popup.css" rel="stylesheet">
-  <link href="/tick.css" rel="stylesheet">
+    <script src="/popup.js"></script>
+    <script src="/flip.js"></script>
+    <link href="/popup.css" rel="stylesheet">
+    <link href="/tick.css" rel="stylesheet">
 </body>
 
 </html>

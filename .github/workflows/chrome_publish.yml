@@ -1,0 +1,22 @@
+name: Publish to Chrome Web Store
+on:
+    push:
+      branches: [ "main" ]
+    workflow_dispatch:
+      
+jobs:
+    zip:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: montudor/action-zip@v1
+              with:
+                args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js ./platform/chromium/manifest.json popup.css popup.html popup.js tick.css
+            - uses: mnao305/chrome-extension-upload@v4.0.1
+              with:
+                file-path: CursorConnect.zip
+                extension-id: golmpimdjemjkffedbgjflgbcmcdcfnf
+                client-id: ${{ secrets.CLIENT_ID }}
+                client-secret: ${{ secrets.CLIENT_SECRET }}
+                refresh-token: ${{ secrets.REFRESH_TOKEN }}
+                publish: false
