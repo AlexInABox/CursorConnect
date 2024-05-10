@@ -16,6 +16,6 @@ jobs:
               with:
                 uuid: 'cursor@alexinabox.de'
                 xpi: CursorConnect.zip
-                manifest: /platform/firefox/manifest.json
+                manifest: platform/firefox/manifest.json
                 api-key: ${{ secrets.FIREFOX_API_KEY }}
                 api-secret: ${{ secrets.FIREFOX_API_SECRET }}
