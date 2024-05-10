@@ -12,7 +12,7 @@ jobs:
             - uses: montudor/action-zip@v1
               with:
                 args: zip -qq -j -r CursorConnect.zip assets customization contentScript.js flip.css flip.js ./platform/chromium/manifest.json popup.css popup.html popup.js tick.css
-            - uses: mnao305/chrome-extension-upload@v4.0.1
+            - uses: mnao305/chrome-extension-upload@v5.0.0
               with:
                 file-path: CursorConnect.zip
                 extension-id: golmpimdjemjkffedbgjflgbcmcdcfnf
