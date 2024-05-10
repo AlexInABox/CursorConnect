@@ -3,7 +3,7 @@ on:
     push:
       branches: [ "main" ]
     workflow_dispatch:
-      
+
 jobs:
     zip:
         runs-on: ubuntu-latest
@@ -11,12 +11,12 @@ jobs:
             - uses: actions/checkout@v1
             - uses: montudor/action-zip@v1
               with:
-                args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js ./platform/chromium/manifest.json popup.css popup.html popup.js tick.css
-            - uses: mnao305/chrome-extension-upload@v4.0.1
+                args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
+            - uses: mobilefirstllc/cws-publish@latest
               with:
-                file-path: CursorConnect.zip
-                extension-id: golmpimdjemjkffedbgjflgbcmcdcfnf
-                client-id: ${{ secrets.CLIENT_ID }}
-                client-secret: ${{ secrets.CLIENT_SECRET }}
-                refresh-token: ${{ secrets.REFRESH_TOKEN }}
-                publish: false
+                action: 'upload'
+                zip_file: CursorConnect.zip
+                extension_id: golmpimdjemjkffedbgjflgbcmcdcfnf
+                client_id: ${{ secrets.CLIENT_ID }}
+                client_secret: ${{ secrets.CLIENT_SECRET }}
+                refresh_token: ${{ secrets.REFRESH_TOKEN }}
