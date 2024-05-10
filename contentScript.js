@@ -1,24 +1,64 @@
-(() => {
-    let URL;
-    let skinId;
+window.browser = (function () {
+    return window.msBrowser ||
+        window.browser ||
+        window.chrome;
+})();
+
+// TODO: Check if url changed by checking every second. DONT ASK THE BROWSER TO TELL YOU (permission)...
+
+function isLocalNetworkURL(url) {
+    //remove the protocol
+    url = url.replace(/.*?:\/\//g, "");
+    //remove everything after the first slash or colon
+    url = url.replace(/\/.*|:.*/g, "");
+    // Regular expression to match IP addresses in the local network (private IP ranges)
+    const localNetworkRegex = /^(^127\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)/;
+    return localNetworkRegex.test(url);
+}
+
+(async () => {
+    let URL = window.location.toString();
+    console.log("cursors: contentScript.js: URL: " + URL);
+
+    if (isLocalNetworkURL(URL)) {
+        console.log("cursors: contentScript.js: URL is on the local-network. Exiting...");
+        return;
+    }
+
+    //check if the url is in the blacklist
+    let blacklist = await browser.storage.local.get(["cursors.blacklist"]);
+    if (!blacklist["cursors.blacklist"]) {
+        console.log("cursors: contentScript.js: blacklist not found. Creating blacklist...");
+        await browser.storage.local.set({ "cursors.blacklist": [] });
+        blacklist = await browser.storage.local.get(["cursors.blacklist"]);
+    }
+
+    console.log("cursors: contentScript.js: blacklist: " + blacklist["cursors.blacklist"]);
+    if (blacklist["cursors.blacklist"].includes(URL)) {
+        console.log("contentScript.js: " + URL + " is blacklisted.");
+        return;
+    }
+
+    var skinId = 0;
+    browser.storage.local.get("cursors.customization.skinId", function (result) {
+        if (result["cursors.customization.skinId"]) {
+            console.log("cursors: contentScript.js: user has customization");
+            skinId = result["cursors.customization.skinId"];
+            if (skinId) {
+                console.log("cursors: contentScript.js: skinId: " + skinId);
+            }
+        }
+    });
 
     let mousePosition = {
         x: -2000,
         y: -2000
     };
-
     let cursorUserCounter = 0;
 
-    chrome.runtime.onMessage.addListener((obj, sender, response) => {
-        if (obj.type == "new-url") {
-            URL = obj.url;
-            skinId = obj.skinId;
-            logThisMessage();
-            terminatePreviousWebSocket();
-            injectCSS();
-            connectToWebSocket();
-            response(200);
-        } else if (obj.type == "fetch-user-count") {
+
+    browser.runtime.onMessage.addListener((obj, sender, response) => {
+        if (obj.type == "fetch-user-count") {
             console.log("cursors: fetch-user-count: " + cursorUserCounter);
             response(cursorUserCounter);
         }
@@ -49,11 +89,6 @@
                 console.log("contentScript.js: terminatePreviousWebSocket: " + e);
             }
         }
-    };
-
-    const logThisMessage = () => {
-        console.log("contentScript.js: " + URL);
-        console.log("contentScript.js: " + skinId);
     };
 
     let ws; //websocket connection
@@ -104,7 +139,7 @@
                 console.log("cursors: We ran into an WebSocket related error when sendin a message. No need to alarm google tho... Here: " + String(error));
             }
 
-        }, 20); //10ms is 100 times per second. This is a good balance between smoothness and performance. Humans eyes cant notice anything that has been less than 13ms on the screen.
+        }, 20); //10ms is 100 times per second. This is a good balance between smoothness and performance. Human eyes cant notice anything that has been less than 13ms on the screen.
 
         ws.onclose = function (event) {
 
@@ -139,10 +174,10 @@
         cursor.className = "cursor";
 
         try {
-            cursor.src = chrome.runtime.getURL("customization/cursors/" + skinId + ".png");
+            cursor.src = browser.runtime.getURL("customization/cursors/" + skinId + ".png");
         }
         catch (e) {
-            cursor.src = chrome.runtime.getURL("customization/cursors/0.png");
+            cursor.src = browser.runtime.getURL("customization/cursors/0.png");
         }
 
 
@@ -208,7 +243,7 @@
             top: -2000px;
             pointer-events: none;
             width: 40px;
-            z-index: 1000;
+            z-index: 999999;
         }
         `;
             //add the style element to the page
@@ -218,4 +253,26 @@
             console.log("cursorConnect: injected css into: " + URL);
         }
     }
+
+    terminatePreviousWebSocket();
+    console.log("cursors: contentScript.js: readyState: " + document.readyState);
+    if (document.readyState == "complete") {
+        injectCSS();
+        connectToWebSocket();
+    } else {
+        window.onload = () => {
+            injectCSS();
+            connectToWebSocket();
+        };
+    }
+
+    setInterval(function () {
+        if (window.location.toString() != URL) {
+            URL = window.location.toString();
+            console.log("cursors: contentScript.js: URL changed to: " + URL);
+            terminatePreviousWebSocket();
+            injectCSS();
+            connectToWebSocket();
+        }
+    }, 1000);
 })();

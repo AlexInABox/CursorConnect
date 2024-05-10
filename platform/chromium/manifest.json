@@ -1,25 +1,32 @@
 {
   "name": "CursorConnect",
-  "version": "0.0.9",
+  "version": "0.1.4",
   "description": "Real-time cursor interaction for a more connected browsing experience.",
-  "permissions": ["storage", "tabs"],
-  "background": {
-    "service_worker": "background.js"
-  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
-      "js": ["contentScript.js"],
-      "run_at": "document_start"
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "contentScript.js"
+      ],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": [  
+      "resources": [
         "assets/cursor.png",
         "customization/*.png"
       ],
-      "matches": ["*://*/*"]
+      "matches": [
+        "*://*/*"
+      ]
     }
   ],
   "action": {
@@ -29,7 +36,7 @@
       "32": "assets/icon32.png",
       "48": "assets/icon48.png",
       "128": "assets/icon128.png"
-    } 
+    }
   },
   "icons": {
     "16": "assets/icon16.png",
