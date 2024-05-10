@@ -34,6 +34,6 @@ jobs:
         with:
           uuid: 'cursor@alexinabox.de'
           xpi: ${{ steps.web-ext-build.outputs.target }}
-          manifest: platform/firefox/manifest.json
+          manifest: manifest.json
           api-key: ${{ secrets.FIREFOX_API_KEY }}
           api-secret: ${{ secrets.FIREFOX_API_SECRET }}
