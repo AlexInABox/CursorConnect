@@ -39,7 +39,7 @@ CursorConnect utilizes an open-source backend server, with its source code avail
 [Chrome]: https://boinky.click/cursorConnect-c
 [Edge]: https://boinky.click/cursorConnect-e
 
-[License]: LICENSE.txt
+[License]: LICENSE
 
 
 <!---------------------------------[ Internal ]-------------------------------->
