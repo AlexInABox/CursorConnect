@@ -1,9 +1,13 @@
+<div align="center">
+
 [![Badge Commits]][Commit Rate]
 [![Badge Issues]][Issues]
 [![Badge License]][License]
 [![Badge Mozilla]][Mozilla]
 [![Badge Chrome]][Chrome]
 [![Badge Edge]][Edge]
+
+</div>
 
 ***
 
