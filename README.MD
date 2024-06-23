@@ -65,17 +65,17 @@ CursorConnect utilizes an open-source backend server, with its source code avail
 [Badge Commits]: https://img.shields.io/github/commit-activity/m/AlexInABox/CursorConnect?label=Commits
 [Badge License]: https://img.shields.io/badge/License-GPLv3-blue.svg
 
-[Badge Chrome Version]: https://img.shields.io/chrome-web-store/v/golmpimdjemjkffedbgjflgbcmcdcfnf.svg
+[Badge Chrome Version]: https://img.shields.io/chrome-web-store/v/golmpimdjemjkffedbgjflgbcmcdcfnf.svg?label=Chrome
 [Badge Chrome Rating]: https://img.shields.io/chrome-web-store/rating/golmpimdjemjkffedbgjflgbcmcdcfnf.svg?label=Chrome%20Rating
 [Badge Chrome Users]: https://img.shields.io/chrome-web-store/users/golmpimdjemjkffedbgjflgbcmcdcfnf.svg?label=Chrome%20Users
 [Chrome]: https://boinky.click/cursorConnect-c
 
-[Badge Firefox Version]: https://img.shields.io/amo/v/cursorconnect.svg
+[Badge Firefox Version]: https://img.shields.io/amo/v/cursorconnect.svg?label=Firefox
 [Badge Firefox Rating]: https://img.shields.io/amo/rating/cursorconnect.svg?label=Firefox%20Rating
 [Badge Firefox Users]: https://img.shields.io/amo/users/cursorconnect.svg?label=Firefox%20Users
 [Firefox]: https://boinky.click/cursorConnect-f
 
-[Badge Edge Version]: https://img.shields.io/badge/dynamic/json?label=Edge&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
+[Badge Edge Version]: https://img.shields.io/badge/dynamic/json?label=Edge&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa?label=Edge
 [Badge Edge Users]: https://img.shields.io/badge/dynamic/json?label=Edge%20Rating&suffix=/5&query=%24.averageRating&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
 [Badge Edge Rating]: https://img.shields.io/badge/dynamic/json?label=Edge%20Users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
 [Edge]: https://boinky.click/cursorConnect-e
