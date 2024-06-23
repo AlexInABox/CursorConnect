@@ -4,15 +4,12 @@
 [![Badge Issues]][Issues]
 [![Badge License]][License]
 [![Badge Mozilla]][Mozilla]
-
 [![Badge Chrome Version]][Chrome]
 [![Badge Chrome Rating]][Chrome]
 [![Badge Chrome Users]][Chrome]
-
 [![Badge Firefox Version]][Firefox]
 [![Badge Firefox Rating]][Firefox]
 [![Badge Firefox Users]][Firefox]
-
 [![Badge Edge Version]][Edge]
 [![Badge Edge Users]][Edge]
 [![Badge Edge Rating]][Edge]
