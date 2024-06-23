@@ -72,13 +72,16 @@ CursorConnect utilizes an open-source backend server, with its source code avail
 [Badge Chrome Version]: https://img.shields.io/chrome-web-store/v/golmpimdjemjkffedbgjflgbcmcdcfnf.svg
 [Badge Chrome Rating]: https://img.shields.io/chrome-web-store/rating/golmpimdjemjkffedbgjflgbcmcdcfnf.svg
 [Badge Chrome Users]: https://img.shields.io/chrome-web-store/users/golmpimdjemjkffedbgjflgbcmcdcfnf.svg
+[Chrome]: https://boinky.click/cursorConnect-c
 
 [Badge Firefox Version]: https://img.shields.io/amo/v/cursorconnect.svg
 [Badge Firefox Rating]: https://img.shields.io/amo/rating/cursorconnect.svg
 [Badge Firefox Users]: https://img.shields.io/amo/users/cursorconnect.svg
+[Firefox]: https://boinky.click/cursorConnect-f
 
 [Badge Edge Version]: https://img.shields.io/badge/dynamic/json?label=Edge&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
 [Badge Edge Users]: https://img.shields.io/badge/dynamic/json?label=Edge%20Rating&suffix=/5&query=%24.averageRating&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
 [Badge Edge Rating]: https://img.shields.io/badge/dynamic/json?label=Edge%20Users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
+[Edge]: https://boinky.click/cursorConnect-e
 [Badge Issues]: https://img.shields.io/github/issues/AlexInABox/CursorConnect
 
