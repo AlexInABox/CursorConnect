@@ -3,6 +3,7 @@
 [![Badge Commits]][Commit Rate]
 [![Badge Issues]][Issues]
 [![Badge License]][License]
+
 [![Badge Chrome Version]][Chrome]
 [![Badge Chrome Rating]][Chrome]
 [![Badge Chrome Users]][Chrome]
