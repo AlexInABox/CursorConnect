@@ -5,7 +5,9 @@
 [![Badge License]][License]
 [![Badge Mozilla]][Mozilla]
 [![Badge Chrome]][Chrome]
-[![Badge Edge]][Edge]
+[![Badge Edge Version]][Edge]
+[![Badge Edge Users]][Edge]
+[![Badge Edge Rating]][Edge]
 
 </div>
 
@@ -59,10 +61,8 @@ CursorConnect utilizes an open-source backend server, with its source code avail
 [Badge Mozilla]: https://img.shields.io/amo/rating/cursorconnect?label=Firefox
 [Badge License]: https://img.shields.io/badge/License-GPLv3-blue.svg
 [Badge Chrome]: https://img.shields.io/chrome-web-store/rating/golmpimdjemjkffedbgjflgbcmcdcfnf?label=Chrome
-[Badge Edge]: https://img.shields.io/badge/dynamic/json?label=Edge&color=brightgreen&query=%24.averageRating&suffix=%2F%35&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2agnjkhpphbbfahegjeeneacaipnjppaa
-// Temporary badges for edge
-[![](https://img.shields.io/badge/dynamic/json?label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa)](https://microsoftedge.microsoft.com/addons/detail/cursorconnect/agnjkhpphbbfahegjeeneacaipnjppaa)
-[![](https://img.shields.io/badge/dynamic/json?label=rating&suffix=/5&query=%24.averageRating&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa)](https://microsoftedge.microsoft.com/addons/detail/cursorconnect/agnjkhpphbbfahegjeeneacaipnjppaa)
-[![](https://img.shields.io/badge/dynamic/json?label=users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa)](https://microsoftedge.microsoft.com/addons/detail/cursorconnect/agnjkhpphbbfahegjeeneacaipnjppaa)
+[Badge Edge Version]: https://img.shields.io/badge/dynamic/json?label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
+[Badge Edge Users]: https://img.shields.io/badge/dynamic/json?label=rating&suffix=/5&query=%24.averageRating&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
+[Badge Edge Rating]: https://img.shields.io/badge/dynamic/json?label=users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
 [Badge Issues]: https://img.shields.io/github/issues/AlexInABox/CursorConnect
 
