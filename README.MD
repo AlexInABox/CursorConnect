@@ -63,17 +63,16 @@ CursorConnect utilizes an open-source backend server, with its source code avail
 <!----------------------------------[ Badges ]--------------------------------->
 
 [Badge Commits]: https://img.shields.io/github/commit-activity/m/AlexInABox/CursorConnect?label=Commits
-[Badge Mozilla]: https://img.shields.io/amo/rating/cursorconnect?label=Firefox
 [Badge License]: https://img.shields.io/badge/License-GPLv3-blue.svg
 
 [Badge Chrome Version]: https://img.shields.io/chrome-web-store/v/golmpimdjemjkffedbgjflgbcmcdcfnf.svg
-[Badge Chrome Rating]: https://img.shields.io/chrome-web-store/rating/golmpimdjemjkffedbgjflgbcmcdcfnf.svg
-[Badge Chrome Users]: https://img.shields.io/chrome-web-store/users/golmpimdjemjkffedbgjflgbcmcdcfnf.svg
+[Badge Chrome Rating]: https://img.shields.io/chrome-web-store/rating/golmpimdjemjkffedbgjflgbcmcdcfnf.svg?label=Chrome%20Rating
+[Badge Chrome Users]: https://img.shields.io/chrome-web-store/users/golmpimdjemjkffedbgjflgbcmcdcfnf.svg?label=Chrome%20Users
 [Chrome]: https://boinky.click/cursorConnect-c
 
 [Badge Firefox Version]: https://img.shields.io/amo/v/cursorconnect.svg
-[Badge Firefox Rating]: https://img.shields.io/amo/rating/cursorconnect.svg
-[Badge Firefox Users]: https://img.shields.io/amo/users/cursorconnect.svg
+[Badge Firefox Rating]: https://img.shields.io/amo/rating/cursorconnect.svg?label=Firefox%20Rating
+[Badge Firefox Users]: https://img.shields.io/amo/users/cursorconnect.svg?label=Firefox%20Users
 [Firefox]: https://boinky.click/cursorConnect-f
 
 [Badge Edge Version]: https://img.shields.io/badge/dynamic/json?label=Edge&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fagnjkhpphbbfahegjeeneacaipnjppaa
