@@ -1,21 +1,39 @@
-name: Publish to Fireffox Add-ons
+name: Publish to Firefox Add-ons
 on:
     push:
       branches: [ "main" ]
     workflow_dispatch:
 
 jobs:
-    zip:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
-            - uses: montudor/action-zip@v1
-              with:
-                args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/firefox/manifest.json
-            - uses: trmcnvn/firefox-addon@v1
-              with:
-                uuid: 'cursor@alexinabox.de'
-                xpi: CursorConnect.zip
-                manifest: /platform/firefox/manifest.json
-                api-key: ${{ secrets.FIREFOX_API_KEY }}
-                api-secret: ${{ secrets.FIREFOX_API_SECRET }}
+
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v1
+      - run: cp platform/firefox/manifest.json manifest.json && rm -rf promo platform
+
+      - name: "web-ext build"
+        id: web-ext-build
+        uses: kewisch/action-web-ext@v1
+        with:
+          cmd: build
+          source: .
+          filename: "{name}-{version}.xpi"
+          ignoreFiles: '[ "package.json","package-lock.json","yarn.lock" ]'
+
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: target.xpi
+          path: ${{ steps.web-ext-build.outputs.target }}
+      
+      - name: "Publish"
+        uses: trmcnvn/firefox-addon@v1
+        with:
+          uuid: 'cursor@alexinabox.de'
+          xpi: ${{ steps.web-ext-build.outputs.target }}
+          manifest: manifest.json
+          api-key: ${{ secrets.FIREFOX_API_KEY }}
+          api-secret: ${{ secrets.FIREFOX_API_SECRET }}

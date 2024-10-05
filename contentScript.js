@@ -224,6 +224,16 @@ function isLocalNetworkURL(url) {
         };
 
         requestAnimationFrame(animate);
+
+        //Reset opacity
+        // Temporarily remove the class to restart the animation
+        cursor.style.animation = 'none';
+
+        // Force a reflow, so the browser picks up the change
+        cursor.offsetHeight; // This triggers a reflow
+
+        // Reapply the animation
+        cursor.style.animation = '';
     };
 
 
@@ -244,6 +254,17 @@ function isLocalNetworkURL(url) {
             pointer-events: none;
             width: 40px;
             z-index: 999999;
+            opacity: 1;
+            animation: fadeOut 10s forwards cubic-bezier(1,0,.8,.35);
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
         }
         `;
             //add the style element to the page
