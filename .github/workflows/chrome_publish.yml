@@ -5,10 +5,10 @@ on:
     workflow_dispatch:
 
 jobs:
-    zip:
+    build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v4
             - uses: montudor/action-zip@v1
               with:
                 args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
