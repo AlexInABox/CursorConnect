@@ -1,6 +1,6 @@
 {
     "name": "CursorConnect",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Real-time cursor interaction for a more connected browsing experience.",
     "browser_specific_settings": {
         "gecko": {
