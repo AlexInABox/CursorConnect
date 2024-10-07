@@ -12,7 +12,7 @@ jobs:
               uses: actions/checkout@v4
             - name: Install dependencies
               run: |
-                apt install zip
+                sudo apt install zip
             - name: ZIP THEM NOW!!
               run: |
                 zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
