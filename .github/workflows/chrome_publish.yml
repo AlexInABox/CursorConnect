@@ -12,6 +12,10 @@ jobs:
             - uses: montudor/action-zip@v1
               with:
                 args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
+            - uses: actions/upload-artifact@v4
+              with:
+                name: CursorConnect.zip
+                path: CursorConnect.zip
             - uses: mobilefirstllc/cws-publish@latest
               with:
                 action: 'upload'

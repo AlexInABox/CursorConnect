@@ -12,6 +12,10 @@ jobs:
             - uses: montudor/action-zip@v1
               with:
                 args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
+            - uses: actions/upload-artifact@v4
+              with:
+                name: CursorConnect.zip
+                path: CursorConnect.zip
             - uses: wdzeng/edge-addon@v2
               with:
                 product-id: 613aa8be-3fee-4b30-8ab8-b7d9741a8fe0
