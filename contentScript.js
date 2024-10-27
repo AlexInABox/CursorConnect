@@ -18,10 +18,10 @@ function isLocalNetworkURL(url) {
 
 (async () => {
     let URL = window.location.toString();
-    console.log("cursors: contentScript.js: URL: " + URL);
+    //console.log("cursors: contentScript.js: URL: " + URL);
 
     if (isLocalNetworkURL(URL)) {
-        console.log("cursors: contentScript.js: URL is on the local-network. Exiting...");
+        //console.log("cursors: contentScript.js: URL is on the local-network. Exiting...");
         return;
     }
 
@@ -33,9 +33,9 @@ function isLocalNetworkURL(url) {
         blacklist = await browser.storage.local.get(["cursors.blacklist"]);
     }
 
-    console.log("cursors: contentScript.js: blacklist: " + blacklist["cursors.blacklist"]);
+    //console.log("cursors: contentScript.js: blacklist: " + blacklist["cursors.blacklist"]);
     if (blacklist["cursors.blacklist"].includes(URL)) {
-        console.log("contentScript.js: " + URL + " is blacklisted.");
+        //console.log("contentScript.js: " + URL + " is blacklisted.");
         return;
     }
 
@@ -68,6 +68,11 @@ function isLocalNetworkURL(url) {
         //get the cursor position
         mousePosition.x = event.pageX;
         mousePosition.y = event.pageY;
+    });
+
+    window.addEventListener('beforeunload', (event) => {
+        //terminate the websocket before leaving the page
+        terminatePreviousWebSocket();
     });
 
     var previousDistanceToBoundaryX = document.documentElement.scrollLeft;
@@ -164,14 +169,14 @@ function isLocalNetworkURL(url) {
     }
 
     const addClient = (id, skinId) => {
-        console.log("contentScript.js: addClient: adding client with id: " + id + " and skinId: " + skinId);
+        //console.log("contentScript.js: addClient: adding client with id: " + id + " and skinId: " + skinId);
 
         cursorUserCounter++;
 
         //create a new cursor element
         var cursor = document.createElement("img");
         cursor.id = id;
-        cursor.className = "cursor";
+        cursor.className = "CursorConnectUniqueCSSClass";
 
         try {
             cursor.src = browser.runtime.getURL("customization/cursors/" + skinId + ".png");
@@ -236,17 +241,16 @@ function isLocalNetworkURL(url) {
         cursor.style.animation = '';
     };
 
-
     const injectCSS = () => {
-        var alreadyInjected = document.getElementById("multiCursorStyle");
+        var alreadyInjected = document.getElementById("CursorConnectUniqueCSSStyle");
 
         if (!alreadyInjected) {
             //create a new style element
             var style = document.createElement("style");
-            style.id = "multiCursorStyle";
+            style.id = "CursorConnectUniqueCSSStyle";
             //set the style element content
             style.innerHTML = `
-        .cursor {
+        .CursorConnectUniqueCSSClass {
             position: absolute;
             transform: translate(-33%, -23%);
             left: -2000px;
@@ -271,12 +275,11 @@ function isLocalNetworkURL(url) {
 
             document.head.appendChild(style);
 
-            console.log("cursorConnect: injected css into: " + URL);
+            //console.log("cursorConnect: injected css into: " + URL);
         }
     }
 
-    terminatePreviousWebSocket();
-    console.log("cursors: contentScript.js: readyState: " + document.readyState);
+    //console.log("cursors: contentScript.js: readyState: " + document.readyState);
     if (document.readyState == "complete") {
         injectCSS();
         connectToWebSocket();
@@ -290,7 +293,7 @@ function isLocalNetworkURL(url) {
     setInterval(function () {
         if (window.location.toString() != URL) {
             URL = window.location.toString();
-            console.log("cursors: contentScript.js: URL changed to: " + URL);
+            //console.log("cursorConnect: contentScript.js: URL changed to: " + URL);
             terminatePreviousWebSocket();
             injectCSS();
             connectToWebSocket();

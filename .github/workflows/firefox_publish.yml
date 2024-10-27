@@ -24,7 +24,7 @@ jobs:
           ignoreFiles: '[ "package.json","package-lock.json","yarn.lock" ]'
 
       - name: "Upload Artifact"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: target.xpi
           path: ${{ steps.web-ext-build.outputs.target }}
