@@ -18,10 +18,10 @@ function isLocalNetworkURL(url) {
 
 (async () => {
     let URL = window.location.toString();
-    console.log("cursors: contentScript.js: URL: " + URL);
+    //console.log("cursors: contentScript.js: URL: " + URL);
 
     if (isLocalNetworkURL(URL)) {
-        console.log("cursors: contentScript.js: URL is on the local-network. Exiting...");
+        //console.log("cursors: contentScript.js: URL is on the local-network. Exiting...");
         return;
     }
 
@@ -33,9 +33,9 @@ function isLocalNetworkURL(url) {
         blacklist = await browser.storage.local.get(["cursors.blacklist"]);
     }
 
-    console.log("cursors: contentScript.js: blacklist: " + blacklist["cursors.blacklist"]);
+    //console.log("cursors: contentScript.js: blacklist: " + blacklist["cursors.blacklist"]);
     if (blacklist["cursors.blacklist"].includes(URL)) {
-        console.log("contentScript.js: " + URL + " is blacklisted.");
+        //console.log("contentScript.js: " + URL + " is blacklisted.");
         return;
     }
 
@@ -68,6 +68,11 @@ function isLocalNetworkURL(url) {
         //get the cursor position
         mousePosition.x = event.pageX;
         mousePosition.y = event.pageY;
+    });
+
+    window.addEventListener('beforeunload', (event) => {
+        //terminate the websocket before leaving the page
+        terminatePreviousWebSocket();
     });
 
     var previousDistanceToBoundaryX = document.documentElement.scrollLeft;
@@ -236,7 +241,6 @@ function isLocalNetworkURL(url) {
         cursor.style.animation = '';
     };
 
-
     const injectCSS = () => {
         var alreadyInjected = document.getElementById("CursorConnectUniqueCSSStyle");
 
@@ -275,7 +279,6 @@ function isLocalNetworkURL(url) {
         }
     }
 
-    terminatePreviousWebSocket();
     //console.log("cursors: contentScript.js: readyState: " + document.readyState);
     if (document.readyState == "complete") {
         injectCSS();
