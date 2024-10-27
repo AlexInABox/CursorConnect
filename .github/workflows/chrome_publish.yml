@@ -8,11 +8,21 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: montudor/action-zip@v1
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install dependencies
+              run: |
+                sudo apt install zip
+            - name: ZIP THEM NOW!!
+              run: |
+                zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
+            - name: Upload artifact
+              uses: actions/upload-artifact@v4
               with:
-                args: zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
-            - uses: mobilefirstllc/cws-publish@latest
+                name: CursorConnect.zip
+                path: CursorConnect.zip
+            - name: Upload to Chrome
+              uses: mobilefirstllc/cws-publish@latest
               with:
                 action: 'upload'
                 zip_file: CursorConnect.zip
