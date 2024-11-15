@@ -16,16 +16,11 @@ function isLocalNetworkURL(url) {
     return localNetworkRegex.test(url);
 }
 
-(async () => {
-    let URL = window.location.toString();
-    //console.log("cursors: contentScript.js: URL: " + URL);
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-    if (isLocalNetworkURL(URL)) {
-        //console.log("cursors: contentScript.js: URL is on the local-network. Exiting...");
-        return;
-    }
-
-    //check if the url is in the blacklist
+async function isURLBlacklisted(URL) {
     let blacklist = await browser.storage.local.get(["cursors.blacklist"]);
     if (!blacklist["cursors.blacklist"]) {
         console.log("cursors: contentScript.js: blacklist not found. Creating blacklist...");
@@ -33,36 +28,58 @@ function isLocalNetworkURL(url) {
         blacklist = await browser.storage.local.get(["cursors.blacklist"]);
     }
 
-    //console.log("cursors: contentScript.js: blacklist: " + blacklist["cursors.blacklist"]);
-    if (blacklist["cursors.blacklist"].includes(URL)) {
-        //console.log("contentScript.js: " + URL + " is blacklisted.");
-        return;
-    }
+    console.log(blacklist["cursors.blacklist"].includes(URL))
+    return (blacklist["cursors.blacklist"].includes(URL));
+}
 
-    var skinId = 0;
+async function getSkinIdFromStorage() {
+    let skinId;
     browser.storage.local.get("cursors.customization.skinId", function (result) {
         if (result["cursors.customization.skinId"]) {
             console.log("cursors: contentScript.js: user has customization");
             skinId = result["cursors.customization.skinId"];
-            if (skinId) {
-                console.log("cursors: contentScript.js: skinId: " + skinId);
-            }
         }
     });
+
+    if (skinId == undefined) {
+        return 0;
+    }
+    return skinId;
+}
+
+window.addEventListener("load", () => {
+    (async () => {
+        try {
+            await sleep(2000); // This might circumvent some random URL changes or security policies for now
+            main();
+        } catch (error) {
+            console.error("Error in isolated async logic:", error);
+        }
+    })();
+});
+
+async function main() {
+    console.log("Good morning america!!");
+    let URL = window.location.toString();
+    if (isLocalNetworkURL(URL)) {
+        console.log("isLocal");
+        return;
+    }
+
+    if (await isURLBlacklisted()) {
+        console.log("isBlacklisted");
+        return;
+    }
+
+    var skinId = await getSkinIdFromStorage();
+    console.log(skinId)
 
     let mousePosition = {
         x: -2000,
-        y: -2000
+        y: -2000,
+        lastX: -2000,
+        lastY: -2000
     };
-    let cursorUserCounter = 0;
-
-
-    browser.runtime.onMessage.addListener((obj, sender, response) => {
-        if (obj.type == "fetch-user-count") {
-            console.log("cursors: fetch-user-count: " + cursorUserCounter);
-            response(cursorUserCounter);
-        }
-    });
 
     window.addEventListener('mousemove', (event) => {
         //get the cursor position
@@ -129,17 +146,15 @@ function isLocalNetworkURL(url) {
         }
 
         //send cursor position every 10ms
-        var lastX = -2000;
-        var lastY = -2000;
         setInterval(function () {
-            if (lastX == mousePosition.x && lastY == mousePosition.y || ws.readyState != 1) { //if the cursor position hasn't changed or the websocket isn't open
+            if (mousePosition.lastX == mousePosition.x && mousePosition.lastY == mousePosition.y || ws.readyState != 1) { //if the cursor position hasn't changed or the websocket isn't open
                 return;
             }
-            lastX = mousePosition.x;
-            lastY = mousePosition.y;
+            mousePosition.lastX = mousePosition.x;
+            mousePosition.lastY = mousePosition.y;
             //send the cursor position to the server
             try {
-                ws.send(JSON.stringify({ type: "cursor-update", x: lastX, y: lastY }));
+                ws.send(JSON.stringify({ type: "cursor-update", x: mousePosition.lastX, y: mousePosition.lastY }));
             } catch (error) {
                 console.log("cursors: We ran into an WebSocket related error when sendin a message. No need to alarm google tho... Here: " + String(error));
             }
@@ -148,7 +163,7 @@ function isLocalNetworkURL(url) {
 
         ws.onclose = function (event) {
 
-            cursorUserCounter = 0;
+            connectedUserCounter = 0;
             clearInterval(keepaliveInterval);
 
             console.log("cursors: websocket closed for reason: " + event.code);
@@ -156,7 +171,7 @@ function isLocalNetworkURL(url) {
 
         ws.onerror = function (error) {
 
-            cursorUserCounter = 0;
+            connectedUserCounter = 0;
             clearInterval(keepaliveInterval);
 
             console.log("cursors: We ran into an WebSocket related error. No need to alarm google tho...");
@@ -171,7 +186,7 @@ function isLocalNetworkURL(url) {
     const addClient = (id, skinId) => {
         //console.log("contentScript.js: addClient: adding client with id: " + id + " and skinId: " + skinId);
 
-        cursorUserCounter++;
+        connectedUserCounter++;
 
         //create a new cursor element
         var cursor = document.createElement("img");
@@ -192,7 +207,7 @@ function isLocalNetworkURL(url) {
 
     const removeClient = (id) => {
         //remove the cursor from the page
-        cursorUserCounter--;
+        connectedUserCounter--;
 
         document.body.removeChild(document.getElementById(id));
     }
@@ -200,6 +215,7 @@ function isLocalNetworkURL(url) {
     const updateCursor = (id, x, y) => {
         //get the cursor
         var cursor = document.getElementById(id);
+        console.log(cursor);
         //update the cursor position
         //cursor.style.transition = 'transform 0.1s ease'; // Adjust the transition duration as needed
         //cursor.style.transform = `translate(${x}px, ${y}px)`;
@@ -250,27 +266,27 @@ function isLocalNetworkURL(url) {
             style.id = "CursorConnectUniqueCSSStyle";
             //set the style element content
             style.innerHTML = `
-        .CursorConnectUniqueCSSClass {
-            position: absolute;
-            transform: translate(-33%, -23%);
-            left: -2000px;
-            top: -2000px;
-            pointer-events: none;
-            width: 40px;
-            z-index: 999999;
-            opacity: 1;
-            animation: fadeOut 10s forwards cubic-bezier(1,0,.8,.35);
-        }
-
-        @keyframes fadeOut {
-            0% {
+            .CursorConnectUniqueCSSClass {
+                position: absolute;
+                transform: translate(-33%, -23%);
+                left: -2000px;
+                top: -2000px;
+                pointer-events: none;
+                width: 40px;
+                z-index: 999999;
                 opacity: 1;
+                animation: fadeOut 10s forwards cubic-bezier(1,0,.8,.35);
             }
-            100% {
-                opacity: 0;
+    
+            @keyframes fadeOut {
+                0% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                }
             }
-        }
-        `;
+            `;
             //add the style element to the page
 
             document.head.appendChild(style);
@@ -299,4 +315,12 @@ function isLocalNetworkURL(url) {
             connectToWebSocket();
         }
     }, 1000);
-})();
+}
+
+var connectedUserCounter = 0;
+browser.runtime.onMessage.addListener((obj, sender, response) => {
+    if (obj.type == "fetch-user-count") {
+        console.log("cursors: fetch-user-count: " + connectedUserCounter);
+        response(connectedUserCounter);
+    }
+});
