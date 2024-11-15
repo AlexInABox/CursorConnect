@@ -12,6 +12,11 @@
         "storage",
         "activeTab"
     ],
+    "background": {
+        "scripts": [
+            "serviceWorker.js"
+        ]
+    },
     "content_scripts": [
         {
             "matches": [

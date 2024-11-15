@@ -6,6 +6,11 @@
     "storage",
     "activeTab"
   ],
+  "background": {
+    "service_worker": [
+      "serviceWorker.js"
+    ]
+  },
   "content_scripts": [
     {
       "matches": [
