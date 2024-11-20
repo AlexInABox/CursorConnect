@@ -152,6 +152,7 @@ function updateCursor(id, x, y) {
 window.addEventListener("load", () => {
     (async () => {
         try {
+            chrome.runtime.sendMessage({ type: "logout" });
             await sleep(2000); // This might circumvent some random URL changes or security policies for now
             main();
         } catch (error) {
@@ -187,7 +188,7 @@ async function main() {
 
     window.addEventListener('beforeunload', (event) => {
         //terminate the websocket before leaving the page
-        terminatePreviousWebSocket();
+        chrome.runtime.sendMessage({ type: "logout" });
     });
 
     var previousDistanceToBoundaryX = document.documentElement.scrollLeft;
@@ -202,12 +203,10 @@ async function main() {
     });
 
     injectCSS();
-    //connectToWebSocket();
-    chrome.runtime.sendMessage({ type: "login", URL: URL, skinId: skinId });
 
     //send cursor position every 10ms
     setInterval(function () {
-        if (mousePosition.lastX == mousePosition.x && mousePosition.lastY == mousePosition.y) { //if the cursor position hasn't changed or the websocket isn't open
+        if (mousePosition.lastX == mousePosition.x && mousePosition.lastY == mousePosition.y) { //if the cursor position hasn't changed
             return;
         }
         mousePosition.lastX = mousePosition.x;
@@ -218,14 +217,8 @@ async function main() {
     }, 20); //10ms is 100 times per second. This is a good balance between smoothness and performance. Human eyes cant notice anything that has been less than 13ms on the screen.
 
     setInterval(function () {
-        if (window.location.toString() != URL) {
-            URL = window.location.toString();
-            //console.log("cursorConnect: contentScript.js: URL changed to: " + URL);
-            terminatePreviousWebSocket();
-            injectCSS();
-            connectToWebSocket();
-        }
-    }, 1000);
+        chrome.runtime.sendMessage({ type: "keep-alive" });
+    }, 10000);
 }
 
 var connectedUserCounter = 0;
@@ -235,87 +228,20 @@ browser.runtime.onMessage.addListener((obj, sender, response) => {
     }
 });
 
-
-/*
-
-let ws; //websocket connection
-
-const connectToWebSocket = () => {
-    ws = new WebSocket("wss://alexinabox.de/wss/");
-
-    //when the websocket connection is established
-    ws.onopen = function () {
-        //send a message to the server
-        ws.send(JSON.stringify({ type: "login", room: URL, skinId: skinId || 0 }));
+browser.runtime.onMessage.addListener((obj, sender, response) => {
+    if (obj.type == "cursor-update") {
+        updateCursor(obj.id, obj.x, obj.y);
     }
+});
 
-    //when the websocket receives a message
-    ws.onmessage = function (message) {
-        //parse the message
-        var data = JSON.parse(message.data);
-        //if the message is a cursor update
-        if (data.type == "cursor-update") {
-            //update the cursor
-            updateCursor(data.id, data.x, data.y);
-        }
-        //if the message is a new client
-        if (data.type == "connected") {
-            //add the client to the list
-            addClient(data.id, data.skinId || 0);
-        }
-        //if the message is a client disconnect
-        if (data.type == "disconnected") {
-            //remove the client from the list
-            removeClient(data.id);
-        }
+browser.runtime.onMessage.addListener((obj, sender, response) => {
+    if (obj.type == "add-client") {
+        addClient(obj.id, obj.skinId);
     }
+});
 
-    ws.onclose = function (event) {
-
-        connectedUserCounter = 0;
-        clearInterval(keepaliveInterval);
-
-        console.log("cursors: websocket closed for reason: " + event.code);
+browser.runtime.onMessage.addListener((obj, sender, response) => {
+    if (obj.type == "remove-client") {
+        removeClient(obj.id);
     }
-
-    ws.onerror = function (error) {
-
-        connectedUserCounter = 0;
-        clearInterval(keepaliveInterval);
-
-        console.log("cursors: We ran into an WebSocket related error. No need to alarm google tho...");
-    }
-
-    //send keepalive message every 15 seconds
-    const keepaliveInterval = setInterval(function () {
-        ws.send(JSON.stringify({ type: "keepalive" }));
-    }, 15000);
-}
-
-const terminatePreviousWebSocket = () => {
-    if (ws) {
-        try {
-            ws.close();
-        } catch (e) {
-            console.log("contentScript.js: terminatePreviousWebSocket: " + e);
-        }
-    }
-};
-
-//send cursor position every 10ms
-setInterval(function () {
-    if (mousePosition.lastX == mousePosition.x && mousePosition.lastY == mousePosition.y || ws.readyState != 1) { //if the cursor position hasn't changed or the websocket isn't open
-        return;
-    }
-    mousePosition.lastX = mousePosition.x;
-    mousePosition.lastY = mousePosition.y;
-    //send the cursor position to the server
-    try {
-        ws.send(JSON.stringify({ type: "cursor-update", x: mousePosition.lastX, y: mousePosition.lastY }));
-    } catch (error) {
-        console.log("cursors: We ran into an WebSocket related error when sendin a message. No need to alarm google tho... Here: " + String(error));
-    }
-
-}, 20); //10ms is 100 times per second. This is a good balance between smoothness and performance. Human eyes cant notice anything that has been less than 13ms on the screen.
-
-*/
+});

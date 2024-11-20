@@ -4,7 +4,8 @@
   "description": "Real-time cursor interaction for a more connected browsing experience.",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "webNavigation"
   ],
   "background": {
     "service_worker": [

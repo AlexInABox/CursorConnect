@@ -10,7 +10,8 @@
     },
     "permissions": [
         "storage",
-        "activeTab"
+        "activeTab",
+        "webNavigation"
     ],
     "background": {
         "scripts": [
