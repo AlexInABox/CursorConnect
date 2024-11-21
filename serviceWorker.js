@@ -107,35 +107,42 @@ function sendLogout() {
 //Incomming traffic
 async function informUpdateCursor(id, x, y) {
     const [tab] = await browser.tabs.query({ active: true, lastFocusedWindow: true });
-    browser.tabs.sendMessage(tab.id, { type: "cursor-update", id: id, x: x, y: y });
+    browser.tabs.sendMessage(tab.id, { type: "cursor-update", id: id, x: x, y: y })
+        .catch((error) => {
+            console.log("[ERROR] Failed to send cursor-update: " + error.message);
+        });
     console.log("[INFO] Received cursor-update: { id: " + id + ", x: " + x + ", y: " + y + " }")
 }
 
 async function informAddClient(id, skinId) {
     const [tab] = await browser.tabs.query({ active: true, lastFocusedWindow: true });
-    browser.tabs.sendMessage(tab.id, { type: "add-client", id: id, skinId: skinId });
+    browser.tabs.sendMessage(tab.id, { type: "add-client", id: id, skinId: skinId })
+        .catch((error) => {
+            console.log("[ERROR] Failed to send add-client: " + error.message);
+        });
     console.log("[INFO] Received add-client: { id: " + id + ", skinId: " + skinId + " }")
 }
 
 async function informRemoveClient(id) {
     const [tab] = await browser.tabs.query({ active: true, lastFocusedWindow: true });
-    browser.tabs.sendMessage(tab.id, { type: "remove-client", id: id });
+    browser.tabs.sendMessage(tab.id, { type: "remove-client", id: id })
+        .catch((error) => {
+            console.log("[ERROR] Failed to send remove-client: " + error.message);
+        });
     console.log("[INFO] Received remove-client: { id: " + id + " }")
 }
 //end-of incomming traffic
 
 //Storage
 async function getSkinIdFromStorage() {
-    let skinId;
-    browser.storage.local.get("cursors.customization.skinId", function (result) {
-        if (result["cursors.customization.skinId"]) {
-            skinId = result["cursors.customization.skinId"];
-        }
-    });
-
-    if (skinId == undefined) {
-        return 0;
+    try {
+        const result = await browser.storage.local.get("cursors.customization.skinId");
+        const skinId = result["cursors.customization.skinId"] ?? 0; // Use nullish coalescing to default to 0
+        console.log("[INFO] skinId is set to " + skinId);
+        return skinId;
+    } catch (error) {
+        console.error("[ERROR] Failed to get skinId from storage:", error);
+        return 0; // Default to 0 in case of error
     }
-    return skinId;
 }
 //end-of storage
