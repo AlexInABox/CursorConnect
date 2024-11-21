@@ -1,11 +1,17 @@
 {
   "name": "CursorConnect",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "Real-time cursor interaction for a more connected browsing experience.",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "webNavigation"
   ],
+  "background": {
+    "service_worker": [
+      "serviceWorker.js"
+    ]
+  },
   "content_scripts": [
     {
       "matches": [

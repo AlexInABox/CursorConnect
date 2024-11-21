@@ -1,6 +1,6 @@
 {
     "name": "CursorConnect",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "description": "Real-time cursor interaction for a more connected browsing experience.",
     "browser_specific_settings": {
         "gecko": {
@@ -10,8 +10,14 @@
     },
     "permissions": [
         "storage",
-        "activeTab"
+        "activeTab",
+        "webNavigation"
     ],
+    "background": {
+        "scripts": [
+            "serviceWorker.js"
+        ]
+    },
     "content_scripts": [
         {
             "matches": [
