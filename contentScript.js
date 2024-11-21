@@ -143,11 +143,59 @@ function removeClient(id) {
 }
 
 function updateCursor(id, x, y) {
-    //get the cursor
+    // Get the cursor element
     var cursor = document.getElementById(id);
 
-    animateCursor(cursor, x, y); // TODO: Add ability to disable animation or auto-disable if cpu usage is too high
+    // Padding to keep the cursor slightly away from the edges
+    const padding = 32;
+
+    // Get viewport dimensions and positions
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+    const viewportTop = scrollTop;
+    const viewportBottom = scrollTop + viewportHeight - padding;
+    const viewportLeft = scrollLeft;
+    const viewportRight = scrollLeft + viewportWidth - padding;
+
+    // Determine if the cursor is out of bounds vertically or horizontally
+    const isInVerticalBounds = y >= viewportTop && y <= viewportBottom;
+    const isInHorizontalBounds = x >= viewportLeft && x <= viewportRight;
+
+    if (isInVerticalBounds && isInHorizontalBounds) {
+        // If the target is within both vertical and horizontal bounds, animate the cursor
+        cursor.style.opacity = '1'; // Unhide the cursor
+        animateCursor(cursor, x, y);
+    } else {
+        // Initialize stale positions with the current target position
+        let staleX = x;
+        let staleY = y;
+
+        // Check vertical bounds and adjust staleY if needed
+        if (y < viewportTop) {
+            staleY = viewportTop;
+        } else if (y > viewportBottom) {
+            staleY = viewportBottom;
+        }
+
+        // Check horizontal bounds and adjust staleX if needed
+        if (x < viewportLeft) {
+            staleX = viewportLeft;
+        } else if (x > viewportRight) {
+            staleX = viewportRight;
+        }
+
+        // Update cursor position and hide it
+        cursor.style.left = `${staleX}px`;
+        cursor.style.top = `${staleY}px`;
+        cursor.style.animation = 'none';
+        cursor.style.opacity = '0'; // Hide the cursor
+    }
+
 }
+
+
 
 window.addEventListener("load", () => {
     (async () => {
