@@ -90,31 +90,26 @@ function animateCursor(cursor, targetX, targetY) {
     const startY = parseFloat(cursor.style.top || 0);
 
     const animate = (currentTime) => {
-        const progress = (currentTime - startTime) / animationDuration;
+        const progress = (currentTime + 1 - startTime) / animationDuration;
 
         if (progress < 1) {
             const newX = startX + (targetX - startX) * progress;
             const newY = startY + (targetY - startY) * progress;
-            cursor.style.left = newX + 'px';
-            cursor.style.top = newY + 'px';
+
+            if (isCursorInViewport(cursor, newX, newY)) {
+                cursor.style.left = newX + 'px';
+                cursor.style.top = newY + 'px';
+            }
             requestAnimationFrame(animate);
         } else {
-            cursor.style.left = targetX + 'px';
-            cursor.style.top = targetY + 'px';
+            if (isCursorInViewport(cursor, targetX, targetY)) {
+                cursor.style.left = targetX + 'px';
+                cursor.style.top = targetY + 'px';
+            }
         }
     };
 
     requestAnimationFrame(animate);
-
-    //Reset opacity
-    // Temporarily remove the class to restart the animation
-    cursor.style.animation = 'none';
-
-    // Force a reflow, so the browser picks up the change
-    cursor.offsetHeight; // This triggers a reflow
-
-    // Reapply the animation
-    cursor.style.animation = '';
 };
 
 function addClient(id, skinId) {
@@ -146,6 +141,11 @@ function updateCursor(id, x, y) {
     // Get the cursor element
     var cursor = document.getElementById(id);
 
+    animateCursor(cursor, x, y);
+}
+
+function isCursorInViewport(cursor, x, y) {
+    //tbh performancy wise this is horrible
     // Padding to keep the cursor slightly away from the edges
     const padding = 32;
 
@@ -165,8 +165,11 @@ function updateCursor(id, x, y) {
 
     if (isInVerticalBounds && isInHorizontalBounds) {
         // If the target is within both vertical and horizontal bounds, animate the cursor
+        cursor.style.animation = 'none';
+        cursor.offsetHeight; // This triggers a reflow
+        cursor.style.animation = '';
         cursor.style.opacity = '1'; // Unhide the cursor
-        animateCursor(cursor, x, y);
+        return true;
     } else {
         // Initialize stale positions with the current target position
         let staleX = x;
@@ -187,12 +190,14 @@ function updateCursor(id, x, y) {
         }
 
         // Update cursor position and hide it
-        cursor.style.left = `${staleX}px`;
-        cursor.style.top = `${staleY}px`;
         cursor.style.animation = 'none';
         cursor.style.opacity = '0'; // Hide the cursor
-    }
+        cursor.style.left = `${staleX}px`;
+        cursor.style.top = `${staleY}px`;
 
+
+        return false;
+    }
 }
 
 
