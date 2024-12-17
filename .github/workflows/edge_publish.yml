@@ -1,31 +1,31 @@
 name: Publish to Microsoft Store
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-          - name: Install dependencies
-            run: |
-              sudo apt install zip
-          - name: ZIP THEM NOW!!
-            run: |
-              zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
-          - name: Upload artifact
-            uses: actions/upload-artifact@v4
-            with:
-              name: CursorConnect.zip
-              path: CursorConnect.zip
-          - name: Upload to Edge
-            uses: wdzeng/edge-addon@v2
-            with:
-              product-id: 613aa8be-3fee-4b30-8ab8-b7d9741a8fe0
-              zip-path: CursorConnect.zip
-              api-key: ${{ secrets.EDGE_API_KEY }}
-              client-id: ${{ secrets.EDGE_CLIENT_ID }}
-              upload-only: false
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt install zip
+      - name: ZIP THEM NOW!!
+        run: |
+          zip -qq -r CursorConnect.zip assets customization contentScript.js serviceWorker.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CursorConnect.zip
+          path: CursorConnect.zip
+      - name: Upload to Edge
+        uses: wdzeng/edge-addon@v2
+        with:
+          product-id: 613aa8be-3fee-4b30-8ab8-b7d9741a8fe0
+          zip-path: CursorConnect.zip
+          api-key: ${{ secrets.EDGE_API_KEY }}
+          client-id: ${{ secrets.EDGE_CLIENT_ID }}
+          upload-only: false
