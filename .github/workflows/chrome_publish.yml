@@ -1,32 +1,32 @@
 name: Publish to Chrome Web Store
 on:
-    push:
-      branches: [ "main" ]
-    workflow_dispatch:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Install dependencies
-              run: |
-                sudo apt install zip
-            - name: ZIP THEM NOW!!
-              run: |
-                zip -qq -r CursorConnect.zip assets customization contentScript.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
-            - name: Upload artifact
-              uses: actions/upload-artifact@v4
-              with:
-                name: CursorConnect.zip
-                path: CursorConnect.zip
-            - name: Upload to Chrome
-              uses: mobilefirstllc/cws-publish@latest
-              with:
-                action: 'upload'
-                zip_file: CursorConnect.zip
-                extension_id: golmpimdjemjkffedbgjflgbcmcdcfnf
-                client_id: ${{ secrets.CLIENT_ID }}
-                client_secret: ${{ secrets.CLIENT_SECRET }}
-                refresh_token: ${{ secrets.REFRESH_TOKEN }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt install zip
+      - name: ZIP THEM NOW!!
+        run: |
+          zip -qq -r CursorConnect.zip assets customization contentScript.js serviceWorker.js flip.css flip.js popup.css popup.html popup.js tick.css && zip -j CursorConnect.zip ./platform/chromium/manifest.json
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CursorConnect.zip
+          path: CursorConnect.zip
+      - name: Upload to Chrome
+        uses: mobilefirstllc/cws-publish@latest
+        with:
+          action: "upload"
+          zip_file: CursorConnect.zip
+          extension_id: golmpimdjemjkffedbgjflgbcmcdcfnf
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          refresh_token: ${{ secrets.REFRESH_TOKEN }}
