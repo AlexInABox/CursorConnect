@@ -20,6 +20,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
 async function isURLBlacklisted(URL) {
   let blacklist = await browser.storage.local.get(["cursors.blacklist"]);
   if (!blacklist["cursors.blacklist"]) {
