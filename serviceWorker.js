@@ -114,12 +114,12 @@ async function informUpdateCursor(id, x, y) {
     });
   console.log(
     "[INFO] Received cursor-update: { id: " +
-      id +
-      ", x: " +
-      x +
-      ", y: " +
-      y +
-      " }"
+    id +
+    ", x: " +
+    x +
+    ", y: " +
+    y +
+    " }"
   );
 }
 
