@@ -61,7 +61,7 @@ function sendCursorUpdate(x, y) {
 
 function sendLogin(url, skinId) {
   sendLogout();
-  ws = new WebSocket("wss://alexinabox.de/wss/");
+  ws = new WebSocket("wss://cursorconnect.zeitvertreib.vip/");
 
   //Register onmessage event handler
   ws.onmessage = function (message) {
